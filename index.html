@@ -117,83 +117,164 @@
       <div class="modal-body grid">
         <div class="field">
           <label for="code">Code</label>
-          <input id="code" name="code" class="input" placeholder="e.g. SUMMER25" required />
-          <div class="desc">Unique code customers enter at checkout.</div>
+          <input
+            id="code"
+            name="code"
+            class="input"
+            placeholder="e.g. SUMMER25"
+            required
+            minlength="3"
+            maxlength="32"
+            spellcheck="false"
+            autocomplete="off"
+            autocapitalize="characters"
+            aria-describedby="codeDesc codeError"
+            title="Required. Unique code customers enter at checkout (e.g., SUMMER25). 3–32 chars; letters, numbers, or dashes." />
+          <div class="desc" id="codeDesc">Required. Unique checkout code. Use letters, numbers, or dashes; 3–32 characters.</div>
           <div class="error" id="codeError"></div>
         </div>
 
         <div class="field">
           <label for="type">Discount Type</label>
-          <select id="type" name="type" class="input">
+          <select
+            id="type"
+            name="type"
+            class="input"
+            aria-describedby="typeDesc"
+            title="Required. Choose how the discount is applied: percentage (0–100) or fixed (in USD).">
             <option value="percentage">percentage</option>
             <option value="fixed">fixed</option>
           </select>
-          <div class="desc">Choose percentage (like 15%) or fixed amount (like $10).</div>
+          <div class="desc" id="typeDesc">Choose how to apply the discount. Percentage (e.g., 15%) or fixed amount (e.g., $10).</div>
         </div>
 
         <div class="field">
           <label for="value">Discount Value</label>
-          <input id="value" name="value" class="input" type="number" step="0.01" placeholder="e.g. 25 or 10.00" required />
-          <div class="desc">If percentage, 0–100. If fixed, 1 or more.</div>
+          <input
+            id="value"
+            name="value"
+            class="input"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="e.g. 25 or 10.00"
+            required
+            aria-describedby="valueDesc valueError"
+            title="Required. If percentage: 0–100. If fixed: at least 1 (USD)."/>
+          <div class="desc" id="valueDesc">Required. If percentage, enter 0–100. If fixed, enter a value ≥ 1 (USD).</div>
           <div class="error" id="valueError"></div>
         </div>
 
         <div class="field">
           <label for="scope">Scope</label>
-          <select id="scope" name="scope" class="input">
+          <select
+            id="scope"
+            name="scope"
+            class="input"
+            aria-describedby="scopeDesc"
+            title="Required.Where the coupon applies: entire catalog, a category, or a specific product.">
             <option value="all">all</option>
             <option value="category">category</option>
             <option value="product">product</option>
           </select>
-          <div class="desc">Where the coupon applies.</div>
+          <div class="desc" id="scopeDesc">Choose where the coupon applies: All products, a Product category, or a single Product.</div>
         </div>
 
         <div class="field" id="scopeValueField" hidden>
           <label for="scopeValue">Scope Value</label>
-          <input id="scopeValue" name="scopeValue" class="input" placeholder="e.g. shoes or SKU-123" />
-          <div class="desc">Category name or Product ID/SKU.</div>
+          <input
+            id="scopeValue"
+            name="scopeValue"
+            class="input"
+            placeholder="e.g. shoes or SKU-123"
+            aria-describedby="scopeValueDesc"
+            title="Required when Scope is category or product. Provide the category name or product ID/SKU." />
+          <div class="desc" id="scopeValueDesc">Required only when Scope is category or product. Enter the category name or Product ID/SKU.</div>
         </div>
 
         <div class="field">
           <label for="minOrderAmount">Minimum Order Amount</label>
-          <input id="minOrderAmount" name="minOrderAmount" class="input" type="number" step="0.01" placeholder="e.g. 50.00" />
-          <div class="desc">Optional. Leave blank if no minimum.</div>
+          <input
+            id="minOrderAmount"
+            name="minOrderAmount"
+            class="input"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="e.g. 50.00"
+            aria-describedby="minOrderAmountDesc minOrderAmountError"
+            title="Optional. Minimum order subtotal required (before taxes/shipping). Leave blank for no minimum." />
+          <div class="desc" id="minOrderAmountDesc">Optional. Minimum order subtotal (before taxes/shipping). Leave blank for no minimum.</div>
           <div class="error" id="minOrderAmountError"></div>
         </div>
 
         <div class="field">
           <label for="maxDiscount">Maximum Discount</label>
-          <input id="maxDiscount" name="maxDiscount" class="input" type="number" step="0.01" placeholder="e.g. 100.00" />
-          <div class="desc">Optional cap on discount amount.</div>
+          <input
+            id="maxDiscount"
+            name="maxDiscount"
+            class="input"
+            type="number"
+            step="0.01"
+            min="0"
+            placeholder="e.g. 100.00"
+            aria-describedby="maxDiscountDesc maxDiscountError"
+            title="Optional. Caps the discount applied per order. Useful with percentage discounts." />
+          <div class="desc" id="maxDiscountDesc">Optional. Caps the discount per order. Useful to limit percentage discounts.</div>
           <div class="error" id="maxDiscountError"></div>
         </div>
 
         <div class="field toggle">
           <label for="isActive">Active</label>
-          <label class="switch">
-            <input id="isActive" name="isActive" type="checkbox" />
+          <label class="switch" title="Active coupons can be used unless expired or exceeded their limit.">
+            <input
+              id="isActive"
+              name="isActive"
+              type="checkbox"
+              aria-describedby="isActiveDesc isActiveError" />
             <span class="slider"></span>
           </label>
-          <div class="desc">Inactive coupons cannot be used.</div>
+          <div class="desc" id="isActiveDesc">When ON, coupon can be used (subject to expiry and usage limits). Turn OFF to pause.</div>
           <div class="error" id="isActiveError"></div>
         </div>
 
         <div class="field">
           <label for="expiryDate">Expiry Date</label>
-          <input id="expiryDate" name="expiryDate" class="input" type="date" />
-          <div class="desc">Optional. Coupon is invalid after this date.</div>
+          <input
+            id="expiryDate"
+            name="expiryDate"
+            class="input"
+            type="date"
+            aria-describedby="expiryDateDesc"
+            title="Optional. Coupon remains valid through this date (end of day). Leave blank for no expiry." />
+          <div class="desc" id="expiryDateDesc">Optional. Valid through the selected date (end of day). Leave blank for no expiry.</div>
         </div>
 
         <div class="field">
           <label for="usageLimit">Usage Limit</label>
-          <input id="usageLimit" name="usageLimit" class="input" type="number" placeholder="e.g. 100" />
-          <div class="desc">Optional. Total number of times this coupon can be used.</div>
+          <input
+            id="usageLimit"
+            name="usageLimit"
+            class="input"
+            type="number"
+            step="1"
+            min="0"
+            placeholder="e.g. 100"
+            aria-describedby="usageLimitDesc usageLimitError"
+            title="Optional. Maximum total uses across all customers. Leave blank for unlimited." />
+          <div class="desc" id="usageLimitDesc">Optional. Maximum total uses across all customers. Leave blank for unlimited.</div>
           <div class="error" id="usageLimitError"></div>
         </div>
 
         <div class="field readonly">
           <label for="usedCount">Used Count</label>
-          <input id="usedCount" name="usedCount" class="input" type="number" readonly />
+          <input
+            id="usedCount"
+            name="usedCount"
+            class="input"
+            type="number"
+            readonly
+            title="Read-only. Tracks the number of times customers used this coupon." />
           <div class="desc">Read-only. Tracks how many times customers used this coupon.</div>
         </div>
       </div>
@@ -236,7 +317,12 @@
       <div class="modal-body">
         <div class="import-area">
           <input id="importFile" type="file" accept=".json,.csv" />
-          <div class="desc">Upload JSON or CSV with columns: code,type,value,scope,scopeValue,minOrderAmount,maxDiscount,isActive,expiryDate,usageLimit,usedCount</div>
+          <div class="desc">
+            Upload JSON or CSV with columns:
+            code,type,value,scope,scopeValue,minOrderAmount,maxDiscount,isActive,expiryDate,usageLimit,usedCount.
+            Dates: YYYY-MM-DD or ISO 8601. isActive: true/false. Empty fields are treated as “no limit” or not set.
+            Duplicates are matched by code; choose Skip or Update for duplicates.
+          </div>
         </div>
         <div class="import-options">
           <label><input type="radio" name="importMode" value="skip" checked /> Skip duplicates (by code)</label>
