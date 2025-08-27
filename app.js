@@ -15,7 +15,7 @@ const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
 // Set your desired plaintext password here. Keep in mind this is client-side only
 // and can be bypassed by determined users. Changing this string will invalidate
 // previously stored unlock tokens so visitors must re-enter the new password.
-const PASSWORD = "pa55word123"; // <- change this value to set the password
+const PASSWORD = "bulbul123"; // <- change this value to set the password
 const PW_STORAGE_KEY = `__site_pw_token__:${hashString(PASSWORD)}`;
 
 function hashString(s) {
