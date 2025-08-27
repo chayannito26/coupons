@@ -9,6 +9,68 @@ import { firebaseConfig } from "./firebase.js";
 const $ = (sel, el = document) => el.querySelector(sel);
 const $$ = (sel, el = document) => Array.from(el.querySelectorAll(sel));
 
+// --------------------
+// Simple client-side password protection
+// --------------------
+// Set your desired plaintext password here. Keep in mind this is client-side only
+// and can be bypassed by determined users. Changing this string will invalidate
+// previously stored unlock tokens so visitors must re-enter the new password.
+const PASSWORD = "pa55word123"; // <- change this value to set the password
+const PW_STORAGE_KEY = `__site_pw_token__:${hashString(PASSWORD)}`;
+
+function hashString(s) {
+  // Small deterministic hash to tie stored token to the password string.
+  // Not cryptographically secure — just used to detect password changes.
+  let h = 2166136261 >>> 0;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619) >>> 0;
+  }
+  return h.toString(36);
+}
+
+function isUnlocked() {
+  try { return localStorage.getItem(PW_STORAGE_KEY) === "1"; } catch (e) { return false; }
+}
+
+function setUnlocked(val) {
+  try { if (val) localStorage.setItem(PW_STORAGE_KEY, "1"); else localStorage.removeItem(PW_STORAGE_KEY); } catch (e) {}
+}
+
+// Overlay helpers — query elements lazily (module may load before DOM nodes exist)
+function getPwEl(id) {
+  try { return document.getElementById(id); } catch (e) { return null; }
+}
+
+function showPwOverlay() {
+  const el = getPwEl('pwOverlay');
+  const inp = getPwEl('pwInput');
+  if (!el) return;
+  el.style.display = 'flex';
+  el.setAttribute('aria-hidden', 'false');
+  inp?.focus();
+}
+
+function hidePwOverlay() {
+  const el = getPwEl('pwOverlay');
+  if (!el) return;
+  el.style.display = 'none';
+  el.setAttribute('aria-hidden', 'true');
+}
+
+function tryUnlock(entered) {
+  const msg = getPwEl('pwMsg');
+  if (entered === PASSWORD) {
+    setUnlocked(true);
+    hidePwOverlay();
+    // small delay to ensure UI updates before init
+    setTimeout(() => init(), 50);
+    return true;
+  }
+  if (msg) msg.textContent = 'Incorrect password.';
+  return false;
+}
+
 // State
 let db = null;
 let unsubscribe = null;
@@ -83,7 +145,27 @@ function init() {
   // Auto-connect using static config
   tryConnect(firebaseConfig);
 }
-document.addEventListener("DOMContentLoaded", init);
+// Defer initialization: only call init when unlocked.
+document.addEventListener("DOMContentLoaded", () => {
+  const inp = getPwEl('pwInput');
+  const btn = getPwEl('pwBtn');
+  const msg = getPwEl('pwMsg');
+
+  if (btn && inp) {
+    btn.addEventListener('click', () => {
+      msg && (msg.textContent = '');
+      tryUnlock(inp.value);
+    });
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { msg && (msg.textContent = ''); tryUnlock(inp.value); } });
+  }
+
+  if (isUnlocked()) {
+    hidePwOverlay();
+    init();
+  } else {
+    showPwOverlay();
+  }
+});
 
 // Event bindings
 function bindEvents() {

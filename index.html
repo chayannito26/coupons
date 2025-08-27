@@ -25,6 +25,35 @@
   <meta name="twitter:site" content="@chayannito26">
   <meta name="twitter:creator" content="@wasi_master">
   <link rel="stylesheet" href="./styles.css" />
+  <style>
+    /* Minimal styles for client-side password overlay */
+    .pw-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      padding: 16px;
+    }
+    .pw-box {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+    }
+    .pw-box h3 { margin: 0 0 8px 0; }
+    .pw-box .desc { color: #555; font-size: 0.95rem; margin-bottom: 12px; }
+    .pw-row { display:flex; gap:8px; }
+    .pw-row input[type="password"] { flex:1; padding:8px 10px; font-size:1rem; }
+    .pw-row button { padding:8px 12px; }
+    .pw-title { font-size: 1.25rem; margin-bottom: 12px; color:#333 }
+    .pw-message { color: #b00; margin-top:8px; min-height: 1.2em; }
+    .pw-hidden { display:none !important; }
+  </style>
 </head>
 <body>
   <header class="topbar">
@@ -357,5 +386,16 @@
   </dialog>
 
   <script type="module" src="./app.js"></script>
+  <!-- Simple client-side persistent password overlay -->
+  <div id="pwOverlay" class="pw-overlay" aria-hidden="false">
+    <div class="pw-box" role="dialog" aria-label="Password required">
+      <h3 class="pw-title">Enter password to continue</h3>
+      <div class="pw-row">
+        <input id="pwInput" type="password" placeholder="Password" aria-label="Password" />
+        <button id="pwBtn" class="btn">Unlock</button>
+      </div>
+      <div id="pwMsg" class="pw-message" aria-live="polite"></div>
+    </div>
+  </div>
 </body>
 </html>
